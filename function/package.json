@@ -4,7 +4,7 @@
   "description": "",
   "scripts" : {
     "test": "echo \"No tests yet...\"",
-    "build": "npm i -g azure-functions-core-tools@3 && func extensions install --package Microsoft.Azure.WebJobs.Extensions.WebPubSub && npm install --unsafe-perm"
+    "build": "npm i azure-functions-core-tools@3 && node_modules/azure-functions-core-tools/lib/main.js extensions install --package Microsoft.Azure.WebJobs.Extensions.WebPubSub && npm install --unsafe-perm"
   },
   "author": ""
 }
