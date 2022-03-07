@@ -25,12 +25,55 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: HashiCorp - Setup Terraform
+        # You may pin to the exact commit or the version.
+        # uses: hashicorp/setup-terraform@d22444889af304a44b997011fbabb81ff705a7b4
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_version: latest
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: Azure/get-keyvault-secrets@v1
+        with:
+          keyvault: ${{ secrets.KV_NAME }}
+          secrets: 'container-name, resource-group-name, storage-account-name, subscription-id, ARM-TENANT-ID, ARM-CLIENT-ID, ARM-CLIENT-SECRET'  # comma separated list of secret keys that need to be fetched from the Key Vault 
+        id: kvAction
+
+      - name: plan terraform
+        env:
+          ARM_CLIENT_ID: ${{ steps.kvAction.outputs.ARM-CLIENT-ID }}
+          ARM_CLIENT_SECRET: ${{ steps.kvAction.outputs.ARM-CLIENT-SECRET }}
+          ARM_TENANT_ID: ${{ steps.kvAction.outputs.ARM-TENANT-ID }}
+          TF_VAR_container_name: ${{ steps.kvAction.outputs.container-name }}
+          TF_VAR_resource_group_name: ${{ steps.kvAction.outputs.resource-group-name }}
+          TF_VAR_storage_account_name: ${{ steps.kvAction.outputs.storage-account-name }}
+          TF_VAR_subscription_id: ${{ steps.kvAction.outputs.subscription-id }}
+          TF_VAR_key: ${{ github.repository }}.tfstate
+          TF_VAR_gh_repo: ${{ github.repository }}
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+            echo "starting..."
+            cd terraform
+            ./env_setup.sh
+            terraform init --backend-config=backend.tfvars
+            terraform plan -out theplan
+
+      - name: apply terraform
+        env:
+          ARM_CLIENT_ID: ${{ steps.kvAction.outputs.ARM-CLIENT-ID }}
+          ARM_CLIENT_SECRET: ${{ steps.kvAction.outputs.ARM-CLIENT-SECRET }}
+          ARM_TENANT_ID: ${{ steps.kvAction.outputs.ARM-TENANT-ID }}
+          TF_VAR_container_name: ${{ steps.kvAction.outputs.container-name }}
+          TF_VAR_resource_group_name: ${{ steps.kvAction.outputs.resource-group-name }}
+          TF_VAR_storage_account_name: ${{ steps.kvAction.outputs.storage-account-name }}
+          TF_VAR_subscription_id: ${{ steps.kvAction.outputs.subscription-id }}
+          TF_VAR_key: ${{ github.repository }}.tfstate
+          TF_VAR_gh_repo: ${{ github.repository }}
+        run: |
+            echo "starting..."
+            cd terraform
+            terraform apply -auto-approve theplan
