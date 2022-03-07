@@ -1,10 +1,12 @@
 {
-  "name": "",
+  "name": "function",
   "version": "",
   "description": "",
   "scripts" : {
-    "test": "echo \"No tests yet...\"",
-    "build": "npm i azure-functions-core-tools@3 && node_modules/azure-functions-core-tools/lib/main.js extensions install --package Microsoft.Azure.WebJobs.Extensions.WebPubSub && ls -ltah && rm -rf node_modules/ && ls -ltah && npm install --unsafe-perm && ls -ltah"
+    "test": "echo \"No tests yet...\""
   },
-  "author": ""
+  "author": "",
+  "dependencies": {
+    "@azure/web-pubsub": "^1.0.0"
+  }
 }

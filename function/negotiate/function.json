@@ -10,12 +10,6 @@
           "type": "http",
           "direction": "out",
           "name": "res"
-      },
-      {
-          "type": "webPubSubConnection",
-          "name": "connection",
-          "hub": "notification",
-          "direction": "in"
       }
   ]
 }
