@@ -78,8 +78,8 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
-            swa_api_token=$(terraform output swa_api_token)
-            ::set-output name=SWA-API-TOKEN::$swa_api_token
+            swa_api_token=$(terraform output swa_default_host_name)
+            echo "::set-output name=SWA-API-TOKEN::$swa_api_token\n"
 
       - name: static webapp deploy
         id: staticwebapps
