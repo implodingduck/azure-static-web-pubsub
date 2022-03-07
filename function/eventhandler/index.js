@@ -2,7 +2,9 @@ const { WebPubSubServiceClient } = require("@azure/web-pubsub");
 
 module.exports = async function (context, req) {
     context.log('Lets try handling some sort of event!')
-    context.log(`So the context is ${req.context}`)
+    context.log(`So the req is ${req}`)
+    context.log(`So the headers are ${req.headers}`)
+    
     // We have to handle webhook validation https://azure.github.io/azure-webpubsub/references/protocol-cloudevents#validation
     if (req.method === 'GET') {
         context.log(`### Webhook validation was called for ${req.headers['webhook-request-origin']}`)
