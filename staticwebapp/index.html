@@ -2,6 +2,8 @@
     <body>
     <h1>Azure Web PubSub Notification</h1>
     <div id="messages"></div>
+    <textarea id="mymsg"></textarea>
+    <button id="send">Send</button>
     <script>
         (async function () {
             let messages = document.querySelector('#messages');
@@ -15,6 +17,11 @@
                 m.innerText = event.data;
                 messages.appendChild(m);
             };
+            document.getElementById('send').onclick = (e) => {
+                let mymsg = document.getElementById('mymsg').innerText;
+                console.log(mymsg);
+                ws.send(mymsg)
+            }
         })();
     </script>
     </body>

@@ -110,7 +110,7 @@ resource "azurerm_web_pubsub_hub" "uhb" {
   name          = "pubsubhub"
   web_pubsub_id = azurerm_web_pubsub.pubsub.id
   event_handler {
-    url_template       = "https://${azurerm_static_site.swa.default_host_name}/{hub}/{event}"
+    url_template       = "https://${azurerm_static_site.swa.default_host_name}/api/eventhandler"
     user_event_pattern = "*"
     system_events      = ["connect", "connected"]
     # auth {
