@@ -63,6 +63,7 @@ jobs:
             terraform plan -out theplan
 
       - name: apply terraform
+        id: applyterraform
         env:
           ARM_CLIENT_ID: ${{ steps.kvAction.outputs.ARM-CLIENT-ID }}
           ARM_CLIENT_SECRET: ${{ steps.kvAction.outputs.ARM-CLIENT-SECRET }}
@@ -77,3 +78,15 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
+            swa_api_token=$(terraform output swa_api_token)
+            ::set-output name=SWA-API-TOKEN::$swa_api_token
+
+      - name: static webapp deploy
+        id: staticwebapps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.applyterraform.outputs.SWA-API-TOKEN }}
+          action: "upload"
+          app_location: "staticwebapp"
+          skip_app_build: true
+        

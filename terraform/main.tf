@@ -54,3 +54,29 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
   tags = local.tags
 }
+
+resource "azurerm_static_site" "swa" {
+  name                = "azurestaticwebpubsub"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  tags = local.tags
+}
+
+resource "azurerm_web_pubsub" "pubsub" {
+  name                = "azurestaticwebpubsub"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  sku      = "Free_F1"
+  capacity = 1
+
+  live_trace {
+    enabled                   = true
+    messaging_logs_enabled    = true
+    connectivity_logs_enabled = true
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
