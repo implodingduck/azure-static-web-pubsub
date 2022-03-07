@@ -1,15 +1,24 @@
 const { WebPubSubServiceClient } = require("@azure/web-pubsub");
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
-    
-    const name = (req.query.name || (req.body && req.body.name));
-    const responseMessage = name
-        ? "Hello, " + name + ". This HTTP triggered function executed successfully."
-        : "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
+    context.log('Lets try handling some sort of event!')
+    context.log(`So the context is ${req.context}`)
+    // We have to handle webhook validation https://azure.github.io/azure-webpubsub/references/protocol-cloudevents#validation
+    if (req.method === 'GET') {
+        context.log(`### Webhook validation was called for ${req.headers['webhook-request-origin']}`)
+        context.res = {
+            headers: {
+                'webhook-allowed-origin': req.headers['webhook-request-origin'],
+            },
+            status: 200,
+        }
+        context.done()
+        return
+    }
+    const serviceClient = new WebPubSubServiceClient(process.env.PUBSUBHUB_CONNECTIONSTR, process.env.PUBSUBHUB_NAME);
+    serviceClient.sendToAll({ message: "Hello world!", context: req.context });
+    const userId = req.headers['ce-userid']
+    const eventName = req.headers['ce-eventname']
+    context.res = { status: 200 }
 
-    context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: responseMessage
-    };
 }
