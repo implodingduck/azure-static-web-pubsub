@@ -77,15 +77,15 @@ jobs:
         run: |
             echo "starting..."
             cd terraform
-            terraform destroy -auto-approve
-            #terraform apply -auto-approve theplan
+            #terraform destroy -auto-approve
+            terraform apply -auto-approve theplan
             
 
       - name: static webapp deploy
         id: staticwebapps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ steps.applyterraform.outputs.SWA-API-TOKEN }}
+          azure_static_web_apps_api_token: ${{ secrets.SWA_TOKEN }}
           action: "upload"
           app_location: "staticwebapp"
           skip_app_build: true
