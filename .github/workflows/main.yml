@@ -77,8 +77,9 @@ jobs:
         run: |
             echo "starting..."
             cd terraform
-            terraform apply -auto-approve theplan
-            echo "::set-output name=SWA-API-TOKEN::$(terraform output swa_api_token)"
+            terraform destroy -auto-approve
+            #terraform apply -auto-approve theplan
+            
 
       - name: static webapp deploy
         id: staticwebapps
