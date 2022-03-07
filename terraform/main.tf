@@ -55,11 +55,20 @@ resource "azurerm_resource_group" "rg" {
   tags = local.tags
 }
 
+resource "azurerm_application_insights" "app" {
+  name                = "azurestaticwebpubsub-insights"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  application_type    = "other"
+  workspace_id = data.azurerm_log_analytics_workspace.default.id
+}
+
+
 resource "azurerm_static_site" "swa" {
   name                = "azurestaticwebpubsub"
   resource_group_name = azurerm_resource_group.rg.name
   location            = "eastus2"
-  tags = local.tags
+  tags = merge(local.tags, { "hidden-link: /app-insights-instrmentation-key": azurerm_application_insights.app.instrumentation_key, "hidden-link: /app-insights-resource-id": azurerm_application_insights.app.id })
 }
 
 resource "azurerm_web_pubsub" "pubsub" {
