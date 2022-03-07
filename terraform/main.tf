@@ -80,3 +80,23 @@ resource "azurerm_web_pubsub" "pubsub" {
     type = "SystemAssigned"
   }
 }
+
+resource "azurerm_web_pubsub_hub" "uhb" {
+  name          = "pubsubhub"
+  web_pubsub_id = azurerm_web_pubsub.pubsub.id
+  event_handler {
+    url_template       = "https://${azurerm_static_site.swa.default_host_name}/{hub}/{event}"
+    user_event_pattern = "*"
+    system_events      = ["connect", "connected"]
+    # auth {
+    #   managed_identity_id = azurerm_user_assigned_identity.test.id
+    # }
+  }
+
+  anonymous_connections_enabled = true
+
+  depends_on = [
+    azurerm_web_pubsub.pubsub,
+    azurerm_static_site.swa
+  ]
+}
