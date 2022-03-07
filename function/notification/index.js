@@ -1,4 +1,4 @@
-module.exports = function (context, myTimer) {
+module.exports = function (context, req) {
     context.bindings.actions = {
         "actionName": "sendToAll",
         "data": `[DateTime: ${new Date()}] Temperature: ${getValue(22, 1)}\xB0C, Humidity: ${getValue(40, 2)}%`,
