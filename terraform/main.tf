@@ -81,12 +81,7 @@ resource "azurerm_static_site" "swa" {
   name                = "azurestaticwebpubsub"
   resource_group_name = azurerm_resource_group.rg.name
   location            = "eastus2"
-  identity {
-    type = "UserAssigned"
-    identity_ids = [
-      azurerm_user_assigned_identity.runas.id
-    ]
-  }
+  
   tags = merge(local.tags, { "hidden-link: /app-insights-instrmentation-key": azurerm_application_insights.app.instrumentation_key, "hidden-link: /app-insights-resource-id": replace(azurerm_application_insights.app.id, "Microsoft.Insights", "microsoft.insights") })
 }
 
