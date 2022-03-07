@@ -25,18 +25,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      # - name: Install Node
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '14'
       
-      - name: 'Install Azure Function Core Tools'
-        run: 'npm i -g azure-functions-core-tools@3'
-      - name: 'Install WebJobs bundle'
-        run: |
-          npm i -g azure-functions-core-tools@3
-          cd function
-          func extensions install --package Microsoft.Azure.WebJobs.Extensions.WebPubSub
+      # - name: 'Install Azure Function Core Tools'
+      #   run: 'npm i -g azure-functions-core-tools@3'
+      # - name: 'Install WebJobs bundle'
+      #   run: |
+      #     npm i -g azure-functions-core-tools@3
+      #     cd function
+      #     func extensions install --package Microsoft.Azure.WebJobs.Extensions.WebPubSub
 
       - name: HashiCorp - Setup Terraform
         # You may pin to the exact commit or the version.
@@ -102,5 +102,6 @@ jobs:
           action: "upload"
           app_location: "staticwebapp"
           api_location: "function"
+          api_build_command: "npm run build"
           skip_app_build: true
         

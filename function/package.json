@@ -3,7 +3,8 @@
   "version": "",
   "description": "",
   "scripts" : {
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "build": "npm i -g azure-functions-core-tools@3 && func extensions install --package Microsoft.Azure.WebJobs.Extensions.WebPubSub && npm install --unsafe-perm"
   },
   "author": ""
 }
