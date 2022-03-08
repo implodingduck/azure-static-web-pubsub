@@ -6,8 +6,9 @@
     <button id="send">Send</button>
     <script>
         (async function () {
+            let userId = window.prompt("Please enter a user id:", "user" + Math.floor(Math.random() * 100 ))
             let messages = document.querySelector('#messages');
-            let res = await fetch(`${window.location.origin}/api/negotiate`);
+            let res = await fetch(`${window.location.origin}/api/negotiate?userId=${userId}`);
             let url = await res.json();
             let ws = new WebSocket(url.url);
             ws.onopen = () => console.log('connected');
