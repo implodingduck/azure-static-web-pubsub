@@ -106,7 +106,7 @@ resource "azurerm_web_pubsub" "pubsub" {
 
 
 
-resource "azurerm_web_pubsub_hub" "uhb" {
+resource "azurerm_web_pubsub_hub" "hub" {
   name          = "pubsubhub"
   web_pubsub_id = azurerm_web_pubsub.pubsub.id
   event_handler {
@@ -132,9 +132,9 @@ resource "null_resource" "app_setting_cs"{
     azurerm_static_site.swa
   ]
   triggers = {
-    index = "${azurerm_static_site.swa.name}-${azurerm_web_pubsub.pubsub.name}"
+    index = "${azurerm_static_site.swa.name}-${azurerm_web_pubsub_hub.hub.name}"
   }
   provisioner "local-exec" {
-    command     = "az staticwebapp appsettings set --name ${azurerm_static_site.swa.name} --setting-names PUBSUBHUB_CONNECTIONSTR=\"Endpoint=https://${azurerm_web_pubsub.pubsub.name}.webpubsub.azure.com;Version=1.0;\" PUBSUBHUB_NAME=\"${azurerm_web_pubsub.pubsub.name}\""
+    command     = "az staticwebapp appsettings set --name ${azurerm_static_site.swa.name} --setting-names PUBSUBHUB_CONNECTIONSTR=\"Endpoint=https://${azurerm_web_pubsub.pubsub.name}.webpubsub.azure.com;Version=1.0;\" PUBSUBHUB_NAME=\"${azurerm_web_pubsub_hub.hub.name}\""
   }
 }
