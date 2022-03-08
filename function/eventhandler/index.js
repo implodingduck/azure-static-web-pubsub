@@ -18,6 +18,8 @@ module.exports = async function (context, req) {
     const serviceClient = new WebPubSubServiceClient(process.env.PUBSUBHUB_CONNECTIONSTR, process.env.PUBSUBHUB_NAME);
     
     const eventName = req.headers['ce-eventname']
+    context.log(`The event is: ${eventName} with body: ${req.body}`)
+
     const userId = req.headers['ce-userid']
     const eventTime = req.headers['ce-time']
     if (eventName === 'message'){

@@ -5,7 +5,7 @@ module.exports = async function (context, req) {
 
     // Get the access token for the WebSocket client connection to use
     let userId = req.query.userId
-    let token = await serviceClient.getClientAccessToken(userId);
+    let token = await serviceClient.getClientAccessToken({ userId: userId });
 
     context.log('JavaScript HTTP trigger function processed a request.');
     context.res = { body: token };
