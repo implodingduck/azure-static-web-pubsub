@@ -1,12 +1,13 @@
 <html>
     <body>
-    <h1>Azure Web PubSub Demo</h1>
+    <h1>Azure Web PubSub Demo [<span id="username"></span>]</h1>
     <div id="messages"></div>
     <textarea id="mymsg"></textarea>
     <button id="send">Send</button>
     <script>
         (async function () {
             let userId = window.prompt("Please enter a user id:", "user" + Math.floor(Math.random() * 100 ))
+            document.getElementById('username').innerText = userId
             let messages = document.querySelector('#messages');
             let res = await fetch(`${window.location.origin}/api/negotiate?userId=${userId}`);
             let url = await res.json();
