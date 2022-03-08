@@ -2,8 +2,8 @@ const { WebPubSubServiceClient } = require("@azure/web-pubsub");
 
 module.exports = async function (context, req) {
     context.log('Lets try handling some sort of event!')
-    context.log(`So the req is ${req}`)
-    context.log(`So the headers are ${req.headers}`)
+    context.log(`So the req is ${JSON.stringify(req, null, 2)}`)
+    context.log(`So the headers are ${JSON.stringify(req.headers,null, 2)}`)
     
     // We have to handle webhook validation https://azure.github.io/azure-webpubsub/references/protocol-cloudevents#validation
     if (req.method === 'GET') {
@@ -18,7 +18,7 @@ module.exports = async function (context, req) {
         return
     }
     const serviceClient = new WebPubSubServiceClient(process.env.PUBSUBHUB_CONNECTIONSTR, process.env.PUBSUBHUB_NAME);
-    serviceClient.sendToAll({ message: "Hello world!", context: req.context });
+    serviceClient.sendToAll({ message: JSON.stringify(req, null, 2), context: req.context });
     const userId = req.headers['ce-userid']
     const eventName = req.headers['ce-eventname']
     context.res = { status: 200 }
