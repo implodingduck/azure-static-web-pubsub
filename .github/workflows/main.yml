@@ -90,8 +90,8 @@ jobs:
         run: |
             echo "starting..."
             cd terraform
-            #terraform destroy -auto-approve
-            terraform apply -auto-approve theplan
+            terraform destroy -auto-approve
+            #terraform apply -auto-approve theplan
             
 
       - name: static webapp deploy
